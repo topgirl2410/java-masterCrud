@@ -7,13 +7,13 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JSpinner;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import java.util.List;
+
 /**
  * Ventana gráfica encargada de gestionar el CRUD de huéspedes. Permite insertar
  * un nuevo huésped en la base de datos mediante el uso de la clase Huesped y el
@@ -63,8 +63,8 @@ public class PantallaHuesped {
 	/** Botón para actualizar los datos de un huésped (pendiente de implementar) */
 	private JButton btnActualizar;
 
-	/** Componente spinner no utilizado actualmente */
-	private final JSpinner spinner = new JSpinner();
+	/** Boton para listar a los huespedes */
+
 	private JButton btnListar;
 
 	/**
@@ -302,7 +302,7 @@ public class PantallaHuesped {
 			public void actionPerformed(ActionEvent e) {
 
 				DataHuesped dh = new DataHuesped();
-				java.util.List<Huesped> lista = dh.listarHuespedes();
+				List<Huesped> lista = dh.listarHuespedes();
 
 				for (Huesped h : lista) {
 					System.out.println(h.getCodigo() + " - " + h.getNombre() + " " + h.getApellidos() + " - Hab: "
@@ -394,7 +394,7 @@ public class PantallaHuesped {
 		btnActualizar.setBounds(432, 467, 105, 27);
 		frame.getContentPane().add(btnActualizar);
 
-		JList list = new JList();
+		JList<String> list = new JList<>();
 		list.setBounds(169, 405, 200, 50);
 		frame.getContentPane().add(list);
 
