@@ -75,4 +75,32 @@ public class DataHuesped {
 			return false;
 		}
 	}
+
+	/**
+	 * Busca un huésped en la base de datos mediante su código.
+	 * 
+	 * @param id código del huésped que se desea consultar
+	 * @return un objeto Huesped con los datos encontrados, o null si no existe
+	 */
+	public Huesped buscarHuesped(int id) {
+
+		String sql = "SELECT * FROM huesped WHERE codigoHuesped = ?";
+
+		try (Connection cx = conectar(); PreparedStatement ps = cx.prepareStatement(sql)) {
+
+			ps.setInt(1, id);
+			var rs = ps.executeQuery();
+
+			if (rs.next()) {
+				return new Huesped(rs.getInt("codigoHuesped"), rs.getString("nombre"), rs.getString("apellidos"),
+						rs.getString("direccion"), rs.getString("ciudad"), rs.getString("numTarjeta"),
+						rs.getInt("numHabitacion"));
+			}
+
+		} catch (SQLException e) {
+			System.out.println("❌ Error al cargar: " + e.getMessage());
+		}
+
+		return null; // Si no existe el ID
+	}
 }

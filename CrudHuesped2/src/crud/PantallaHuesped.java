@@ -240,6 +240,7 @@ public class PantallaHuesped {
 							txtNumTarjeta.getText(), Integer.parseInt(txtNumHabitacion.getText()));
 					if (huesped.insertarHuesped()) {
 						JOptionPane.showMessageDialog(null, "Se inserto correctamente");
+						limpiar();
 					} else {
 						JOptionPane.showMessageDialog(null, "Error al insertar");
 					}
@@ -252,6 +253,46 @@ public class PantallaHuesped {
 		frame.getContentPane().add(btnInsertar);
 
 		btnCargar = new JButton("Cargar");
+		btnCargar.addActionListener(new ActionListener() {
+
+			/**
+			 * Acción ejecutada al presionar el botón Cargar. Pide al usuario un código de
+			 * huésped, lo busca en la base de datos y, si existe, rellena los campos del
+			 * formulario con sus datos.
+			 */
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String input = JOptionPane.showInputDialog("Ingresa el código de huésped a cargar:");
+
+					// Si el usuario cancela o deja vacío
+					if (input == null || input.trim().isEmpty()) {
+						return;
+					}
+
+					int id = Integer.parseInt(input.trim());
+
+					DataHuesped dh = new DataHuesped();
+					Huesped h = dh.buscarHuesped(id);
+
+					if (h != null) {
+						txtCodigoHuesped.setText(String.valueOf(h.getCodigo()));
+						txtNombre.setText(h.getNombre());
+						txtApellidos.setText(h.getApellidos());
+						txtDireccion.setText(h.getDireccion());
+						txtCiudad.setText(h.getCiudad());
+						txtNumTarjeta.setText(h.getNumTarjeta());
+						txtNumHabitacion.setText(String.valueOf(h.getNumHabitacion()));
+					} else {
+						JOptionPane.showMessageDialog(null, "No existe ningún huésped con ese código");
+					}
+
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "El código debe ser un número");
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Error al cargar");
+				}
+			}
+		});
 		btnCargar.setBounds(154, 467, 105, 27);
 		frame.getContentPane().add(btnCargar);
 
@@ -266,5 +307,28 @@ public class PantallaHuesped {
 		JList list = new JList();
 		list.setBounds(169, 405, 200, 50);
 		frame.getContentPane().add(list);
+	}
+
+	/**
+	 * Limpia todos los campos de entrada del formulario de la interfaz gráfica.
+	 * 
+	 * Este método restablece a vacío cada uno de los {@link JTextField} utilizados
+	 * para introducir los datos del huésped, permitiendo que el usuario pueda
+	 * volver a ingresar información desde cero.
+	 * 
+	 * Además, devuelve el foco al campo correspondiente al código del huésped para
+	 * facilitar una nueva inserción.
+	 */
+	public void limpiar() {
+		txtCodigoHuesped.setText("");
+		txtNombre.setText("");
+		txtApellidos.setText("");
+		txtDireccion.setText("");
+		txtCiudad.setText("");
+		txtNumTarjeta.setText("");
+		txtNumHabitacion.setText("");
+
+		// Coloca el cursor al primer campo
+		txtCodigoHuesped.requestFocus();
 	}
 }
