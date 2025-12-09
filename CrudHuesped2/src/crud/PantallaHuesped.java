@@ -102,6 +102,7 @@ public class PantallaHuesped {
 		frame = new JFrame();
 		frame.setTitle("CRUD HUESPED");
 		frame.setBounds(100, 100, 600, 600);
+		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -273,7 +274,7 @@ public class PantallaHuesped {
 					Huesped h = dh.cargarHuesped(id);
 
 					if (h != null) {
-						txtCodigoHuesped.setText(String.valueOf(h.getCodigo()));
+						txtCodigoHuesped.setText(String.valueOf("" + h.getCodigo()));
 						txtNombre.setText(h.getNombre());
 						txtApellidos.setText(h.getApellidos());
 						txtDireccion.setText(h.getDireccion());
