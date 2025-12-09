@@ -1,16 +1,16 @@
 package crud;
 
 import java.sql.Connection;
-
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
- * Clase encargada de gestionar la conexión y las operaciones relacionadas con
- * la base de datos MySQL para la entidad Huesped.
+ * Clase DAO (Data Access Object) encargada de gestionar la comunicación entre
+ * el programa y la base de datos MySQL para la entidad Huesped.
  *
- * Se considera la capa de acceso a datos (DAO) dentro del patrón MVC.
+ * Incluye operaciones como insertar y buscar huéspedes.
  */
 public class DataHuesped {
 
@@ -18,45 +18,34 @@ public class DataHuesped {
 	 * Establece y devuelve una conexión con la base de datos MySQL.
 	 *
 	 * @return un objeto {@link Connection} si la conexión fue exitosa, o null si
-	 *         hubo un error.
+	 *         ocurrió un error.
 	 */
 	public Connection conectar() {
-		Connection cx = null;
 		try {
-			cx = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel?useSSL=false&serverTimezone=UTC",
-					"princess", "Sabater_82");
+			Connection cx = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/hotel?useSSL=false&serverTimezone=UTC", "princess", "Sabater_82");
 			System.out.println("✔ Conexión exitosa");
+			return cx;
+
 		} catch (SQLException e) {
 			System.out.println("❌ Error en la conexión: " + e.getMessage());
+			return null;
 		}
-		return cx;
 	}
 
 	/**
-	 * Método principal solo para pruebas de conexión a la base de datos.
+	 * Inserta un nuevo huésped en la base de datos.
 	 *
-	 * @param args argumentos no utilizados
-	 */
-	public static void main(String[] cecyto) {
-		DataHuesped dh = new DataHuesped();
-		dh.conectar();
-	}
-
-	/**
-	 * Inserta un objeto {@link Huesped} en la base de datos.
-	 * 
-	 * El método utiliza un PreparedStatement para evitar inyecciones SQL y asegura
-	 * que se asignen correctamente los valores del huésped.
-	 *
-	 * @param h el objeto Huesped que se desea insertar en la base de datos
-	 * @return true si la inserción fue exitosa, false si ocurrió algún error
-	 * 
-	 * 
+	 * @param h objeto Huesped que se desea guardar.
+	 * @return true si la inserción fue exitosa, false si ocurrió un error.
 	 */
 	public boolean insertarHuesped(Huesped h) {
-		String sql = "INSERT INTO huesped "
-				+ "(codigoHuesped, nombre, apellidos, direccion, ciudad, numTarjeta, numHabitacion) "
-				+ "VALUES (?,?,?,?,?,?,?)";
+
+		String sql = """
+				INSERT INTO huesped
+				(codigoHuesped, nombre, apellidos, direccion, ciudad, numTarjeta, numHabitacion)
+				VALUES (?,?,?,?,?,?,?)
+				""";
 
 		try (Connection cx = conectar(); PreparedStatement ps = cx.prepareStatement(sql)) {
 
@@ -71,16 +60,17 @@ public class DataHuesped {
 			return ps.executeUpdate() > 0;
 
 		} catch (SQLException e) {
-			System.out.println("❌ Error al insertar: " + e.getMessage());
+			System.out.println("❌ Error al insertar huésped: " + e.getMessage());
 			return false;
 		}
 	}
 
 	/**
-	 * Busca un huésped en la base de datos mediante su código.
-	 * 
-	 * @param huesped código del huésped que se desea consultar
-	 * @return un objeto Huesped con los datos encontrados, o null si no existe
+	 * Busca un huésped en la base de datos por su código único.
+	 *
+	 * @param codigoHuesped código del huésped a buscar.
+	 * @return un objeto {@link Huesped} con los datos encontrados, o null si el
+	 *         huésped no existe.
 	 */
 	public Huesped cargarHuesped(int codigoHuesped) {
 
@@ -89,7 +79,7 @@ public class DataHuesped {
 		try (Connection cx = conectar(); PreparedStatement ps = cx.prepareStatement(sql)) {
 
 			ps.setInt(1, codigoHuesped);
-			var rs = ps.executeQuery();
+			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
 				return new Huesped(rs.getInt("codigoHuesped"), rs.getString("nombre"), rs.getString("apellidos"),
@@ -98,10 +88,9 @@ public class DataHuesped {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("❌ Error al cargar: " + e.getMessage());
+			System.out.println("❌ Error al cargar huésped: " + e.getMessage());
 		}
 
-		return null; // Si no existe el ID
+		return null;
 	}
-
 }

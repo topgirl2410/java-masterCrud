@@ -226,20 +226,18 @@ public class PantallaHuesped {
 
 			/**
 			 * Acción ejecutada al presionar el botón Insertar. Crea un objeto Huesped con
-			 * los datos de la interfaz y llama al método insertarHuesped() para almacenarlo
-			 * en la base de datos.
-			 *
-			 * Muestra mensajes indicando éxito o error.
-			 * 
-			 * 
+			 * los datos de la interfaz y usa DataHuesped para guardarlo en la base de
+			 * datos.
 			 */
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Huesped huesped = new Huesped(Integer.parseInt(txtCodigoHuesped.getText()), txtNombre.getText(),
 							txtApellidos.getText(), txtDireccion.getText(), txtCiudad.getText(),
 							txtNumTarjeta.getText(), Integer.parseInt(txtNumHabitacion.getText()));
-					if (huesped.insertarHuesped()) {
-						JOptionPane.showMessageDialog(null, "Se inserto correctamente");
+
+					DataHuesped dh = new DataHuesped(); // ⬅️ usamos el DAO
+					if (dh.insertarHuesped(huesped)) { // ⬅️ ya no huesped.insertarHuesped()
+						JOptionPane.showMessageDialog(null, "Se insertó correctamente");
 						limpiar();
 					} else {
 						JOptionPane.showMessageDialog(null, "Error al insertar");

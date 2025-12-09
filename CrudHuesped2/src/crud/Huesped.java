@@ -4,35 +4,34 @@ package crud;
  * Clase que representa a un huésped del hotel. Contiene la información personal
  * y administrativa asociada al cliente dentro del sistema.
  *
- * Esta clase forma parte del modelo dentro del patrón MVC y trabaja junto con
- * DataHuesped para la gestión en la base de datos.
+ * Esta clase forma parte del modelo dentro del patrón MVC.
  */
 public class Huesped {
 
-	/** Código único que identifica al huésped en la base de datos */
-	int codigoHuesped;
+	/** Código único que identifica al huésped en la base de datos. */
+	private int codigoHuesped;
 
-	/** Nombre, apellidos, direccion, ciudad, numero de tarjeta del huesped */
-	String nombre, apellidos, direccion, ciudad, numTarjeta;
+	/** Datos personales del huésped. */
+	private String nombre;
+	private String apellidos;
+	private String direccion;
+	private String ciudad;
+	private String numTarjeta;
 
-	/** Número de habitación asignada al huésped */
-	int numHabitacion;
-
-	/** Objeto de acceso a datos para la gestión del huésped */
-	DataHuesped dh = new DataHuesped();
+	/** Número de habitación asignada al huésped. */
+	private int numHabitacion;
 
 	/**
-	 * Constructor completo para crear un huésped con todos los datos requeridos.
+	 * Constructor completo utilizado para crear un huésped con toda su información.
 	 *
-	 * @param codigoHuesped código único del huésped
-	 * @param nombre        nombre del huésped
-	 * @param apellidos     apellidos del huésped
-	 * @param direccion     dirección completa del huésped
-	 * @param ciudad        ciudad del huésped
-	 * @param numTarjeta    número de tarjeta del huésped
-	 * @param numHabitacion número de habitación asignada
+	 * @param codigoHuesped código único del huésped.
+	 * @param nombre        nombre del huésped.
+	 * @param apellidos     apellidos del huésped.
+	 * @param direccion     dirección del huésped.
+	 * @param ciudad        ciudad de residencia del huésped.
+	 * @param numTarjeta    número de tarjeta del huésped.
+	 * @param numHabitacion número de habitación asignada.
 	 */
-
 	public Huesped(int codigoHuesped, String nombre, String apellidos, String direccion, String ciudad,
 			String numTarjeta, int numHabitacion) {
 
@@ -46,40 +45,28 @@ public class Huesped {
 	}
 
 	/**
-	 * Constructor vacío utilizado cuando se requiere construir un huésped sin
-	 * parámetros iniciales.
+	 * Constructor vacío utilizado para crear un huésped sin datos iniciales.
 	 */
-
 	public Huesped() {
 	}
 
-	/**
-	 * Inserta este huésped en la base de datos utilizando la clase DataHuesped.
-	 *
-	 * @return true si el huésped fue insertado correctamente, false en caso
-	 *         contrario.
-	 */
-
-	public boolean insertarHuesped() {
-		return dh.insertarHuesped(this);
-	}
-
-
+	// -------------------
 	// GETTERS Y SETTERS
+	// -------------------
 
 	/**
 	 * Obtiene el código único del huésped.
 	 * 
-	 * @return código del huésped
+	 * @return el código del huésped.
 	 */
 	public int getCodigo() {
 		return codigoHuesped;
 	}
 
 	/**
-	 * Establece el código del huésped.
+	 * Asigna un nuevo código al huésped.
 	 * 
-	 * @param codigo nuevo código a asignar
+	 * @param codigo nuevo código del huésped.
 	 */
 	public void setCodigo(int codigo) {
 		this.codigoHuesped = codigo;
@@ -88,16 +75,16 @@ public class Huesped {
 	/**
 	 * Obtiene el nombre del huésped.
 	 * 
-	 * @return nombre del huésped
+	 * @return nombre del huésped.
 	 */
 	public String getNombre() {
 		return nombre;
 	}
 
 	/**
-	 * Establece el nombre del huésped.
+	 * Modifica el nombre del huésped.
 	 * 
-	 * @param nombre nuevo nombre a asignar
+	 * @param nombre nuevo nombre.
 	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
@@ -106,16 +93,16 @@ public class Huesped {
 	/**
 	 * Obtiene los apellidos del huésped.
 	 * 
-	 * @return apellidos del huésped
+	 * @return apellidos del huésped.
 	 */
 	public String getApellidos() {
 		return apellidos;
 	}
 
 	/**
-	 * Establece los apellidos del huésped.
+	 * Modifica los apellidos del huésped.
 	 * 
-	 * @param apellidos nuevos apellidos a asignar
+	 * @param apellidos nuevos apellidos.
 	 */
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
@@ -124,16 +111,16 @@ public class Huesped {
 	/**
 	 * Obtiene la dirección del huésped.
 	 * 
-	 * @return dirección del huésped
+	 * @return dirección del huésped.
 	 */
 	public String getDireccion() {
 		return direccion;
 	}
 
 	/**
-	 * Establece la dirección del huésped.
+	 * Modifica la dirección del huésped.
 	 * 
-	 * @param direccion nueva dirección a asignar
+	 * @param direccion nueva dirección.
 	 */
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
@@ -142,16 +129,16 @@ public class Huesped {
 	/**
 	 * Obtiene la ciudad del huésped.
 	 * 
-	 * @return ciudad del huésped
+	 * @return ciudad del huésped.
 	 */
 	public String getCiudad() {
 		return ciudad;
 	}
 
 	/**
-	 * Establece la ciudad del huésped.
+	 * Modifica la ciudad del huésped.
 	 * 
-	 * @param ciudad nueva ciudad a asignar
+	 * @param ciudad nueva ciudad.
 	 */
 	public void setCiudad(String ciudad) {
 		this.ciudad = ciudad;
@@ -160,36 +147,34 @@ public class Huesped {
 	/**
 	 * Obtiene el número de tarjeta del huésped.
 	 * 
-	 * @return número de tarjeta
+	 * @return número de tarjeta.
 	 */
 	public String getNumTarjeta() {
 		return numTarjeta;
 	}
 
 	/**
-	 * Establece el número de tarjeta del huésped.
+	 * Modifica el número de tarjeta del huésped.
 	 * 
-	 * @param numTarjeta nuevo número de tarjeta a asignar
+	 * @param numTarjeta nuevo número de tarjeta.
 	 */
 	public void setNumTarjeta(String numTarjeta) {
 		this.numTarjeta = numTarjeta;
 	}
 
 	/**
-	 * Obtiene el número de habitación asignada al huésped.
+	 * Obtiene el número de habitación asignada.
 	 * 
-	 * @return número de habitación
+	 * @return número de habitación.
 	 */
 	public int getNumHabitacion() {
 		return numHabitacion;
 	}
 
 	/**
-	 * Establece el número de habitación del huésped.
+	 * Modifica el número de habitación del huésped.
 	 * 
-	 * @param numHabitacion nueva habitación a asignar
-	 * 
-	 * 
+	 * @param numHabitacion nueva habitación asignada.
 	 */
 	public void setNumHabitacion(int numHabitacion) {
 		this.numHabitacion = numHabitacion;
