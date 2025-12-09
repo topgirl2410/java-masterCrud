@@ -79,16 +79,16 @@ public class DataHuesped {
 	/**
 	 * Busca un huésped en la base de datos mediante su código.
 	 * 
-	 * @param id código del huésped que se desea consultar
+	 * @param huesped código del huésped que se desea consultar
 	 * @return un objeto Huesped con los datos encontrados, o null si no existe
 	 */
-	public Huesped buscarHuesped(int id) {
+	public Huesped cargarHuesped(int codigoHuesped) {
 
 		String sql = "SELECT * FROM huesped WHERE codigoHuesped = ?";
 
 		try (Connection cx = conectar(); PreparedStatement ps = cx.prepareStatement(sql)) {
 
-			ps.setInt(1, id);
+			ps.setInt(1, codigoHuesped);
 			var rs = ps.executeQuery();
 
 			if (rs.next()) {
@@ -103,4 +103,5 @@ public class DataHuesped {
 
 		return null; // Si no existe el ID
 	}
+
 }

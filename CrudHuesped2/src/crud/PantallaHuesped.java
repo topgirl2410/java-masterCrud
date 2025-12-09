@@ -272,7 +272,7 @@ public class PantallaHuesped {
 					int id = Integer.parseInt(input.trim());
 
 					DataHuesped dh = new DataHuesped();
-					Huesped h = dh.buscarHuesped(id);
+					Huesped h = dh.cargarHuesped(id);
 
 					if (h != null) {
 						txtCodigoHuesped.setText(String.valueOf(h.getCodigo()));
