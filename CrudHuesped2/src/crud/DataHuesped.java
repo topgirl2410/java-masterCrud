@@ -1,10 +1,15 @@
 package crud;
 
 import java.sql.Connection;
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import java.util.List;
+import java.util.ArrayList;
+
 
 /**
  * Clase DAO (Data Access Object) encargada de gestionar la comunicación entre
@@ -92,5 +97,83 @@ public class DataHuesped {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Elimina un huésped de la base de datos según su código.
+	 *
+	 * @param codigoHuesped código del huésped a eliminar.
+	 * @return true si se eliminó alguna fila, false si no existía o hubo error.
+	 */
+	public boolean eliminarHuesped(int codigoHuesped) {
+
+		String sql = "DELETE FROM huesped WHERE codigoHuesped = ?";
+
+		try (Connection cx = conectar(); PreparedStatement ps = cx.prepareStatement(sql)) {
+
+			ps.setInt(1, codigoHuesped);
+			return ps.executeUpdate() > 0;
+
+		} catch (SQLException e) {
+			System.out.println("❌ Error al eliminar: " + e.getMessage());
+			return false;
+		}
+	}
+
+	/**
+	 * Actualiza los datos de un huésped existente en la base de datos.
+	 *
+	 * @param h el objeto Huesped con los datos actualizados
+	 * @return true si se modificó alguna fila, false si no existe o hubo error
+	 */
+	public boolean actualizarHuesped(Huesped h) {
+
+		String sql = "UPDATE huesped SET nombre = ?, apellidos = ?, direccion = ?, ciudad = ?, "
+				+ "numTarjeta = ?, numHabitacion = ? WHERE codigoHuesped = ?";
+
+		try (Connection cx = conectar(); PreparedStatement ps = cx.prepareStatement(sql)) {
+
+			ps.setString(1, h.getNombre());
+			ps.setString(2, h.getApellidos());
+			ps.setString(3, h.getDireccion());
+			ps.setString(4, h.getCiudad());
+			ps.setString(5, h.getNumTarjeta());
+			ps.setInt(6, h.getNumHabitacion());
+			ps.setInt(7, h.getCodigo());
+
+			return ps.executeUpdate() > 0;
+
+		} catch (SQLException e) {
+			System.out.println("❌ Error al actualizar: " + e.getMessage());
+			return false;
+		}
+	}
+
+	/**
+	 * Obtiene una lista con todos los huéspedes almacenados en la base de datos.
+	 *
+	 * @return lista de objetos Huesped o lista vacía si no hay datos.
+	 */
+	public List<Huesped> listarHuespedes() {
+
+		List<Huesped> lista = new ArrayList<>();
+		String sql = "SELECT * FROM huesped";
+
+		try (Connection cx = conectar();
+				PreparedStatement ps = cx.prepareStatement(sql);
+				ResultSet rs = ps.executeQuery()) {
+
+			while (rs.next()) {
+				Huesped h = new Huesped(rs.getInt("codigoHuesped"), rs.getString("nombre"), rs.getString("apellidos"),
+						rs.getString("direccion"), rs.getString("ciudad"), rs.getString("numTarjeta"),
+						rs.getInt("numHabitacion"));
+				lista.add(h);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("❌ Error al listar huéspedes: " + e.getMessage());
+		}
+
+		return lista;
 	}
 }

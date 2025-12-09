@@ -1,7 +1,6 @@
 package crud;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -14,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import java.util.List;
 /**
  * Ventana gráfica encargada de gestionar el CRUD de huéspedes. Permite insertar
  * un nuevo huésped en la base de datos mediante el uso de la clase Huesped y el
@@ -65,6 +65,7 @@ public class PantallaHuesped {
 
 	/** Componente spinner no utilizado actualmente */
 	private final JSpinner spinner = new JSpinner();
+	private JButton btnListar;
 
 	/**
 	 * Método principal que inicia la aplicación. Crea una instancia de
@@ -295,17 +296,108 @@ public class PantallaHuesped {
 		btnCargar.setBounds(154, 467, 105, 27);
 		frame.getContentPane().add(btnCargar);
 
+		// --- BOTÓN LISTAR ---
+		btnListar = new JButton("Listar");
+		btnListar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				DataHuesped dh = new DataHuesped();
+				java.util.List<Huesped> lista = dh.listarHuespedes();
+
+				for (Huesped h : lista) {
+					System.out.println(h.getCodigo() + " - " + h.getNombre() + " " + h.getApellidos() + " - Hab: "
+							+ h.getNumHabitacion());
+				}
+
+				JOptionPane.showMessageDialog(null, "Listado mostrado en consola.");
+			}
+		});
+		btnListar.setBounds(22, 430, 105, 27);
+		frame.getContentPane().add(btnListar);
+
 		btnEliminar = new JButton("Eliminar");
+		btnEliminar.addActionListener(new ActionListener() {
+
+			/**
+			 * Acción ejecutada al pulsar el botón Eliminar. Pide un código de huésped y, si
+			 * existe, lo elimina de la base de datos.
+			 */
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String input = JOptionPane.showInputDialog("Código del huésped a eliminar:");
+
+					// Si el usuario cancela o deja vacío, no hace nada
+					if (input == null || input.trim().isEmpty()) {
+						return;
+					}
+
+					int id = Integer.parseInt(input.trim());
+
+					DataHuesped dh = new DataHuesped();
+					boolean borrado = dh.eliminarHuesped(id);
+
+					if (borrado) {
+						JOptionPane.showMessageDialog(null, "Huésped eliminado correctamente");
+						limpiar();
+					} else {
+						JOptionPane.showMessageDialog(null, "No existe un huésped con ese código");
+					}
+
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "El código debe ser un número");
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Error al eliminar");
+				}
+			}
+		});
+
 		btnEliminar.setBounds(295, 467, 105, 27);
 		frame.getContentPane().add(btnEliminar);
 
 		btnActualizar = new JButton("Actualizar");
+		btnActualizar.addActionListener(new ActionListener() {
+
+			/**
+			 * Acción ejecutada al presionar el botón Actualizar. Actualiza los datos de un
+			 * huésped existente usando los valores del formulario.
+			 */
+			public void actionPerformed(ActionEvent e) {
+				try {
+
+					// Validar que los campos no estén vacíos
+					if (txtCodigoHuesped.getText().isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Debes cargar un huésped antes de actualizar");
+						return;
+					}
+
+					// Crear objeto huésped con los datos nuevos
+					Huesped h = new Huesped(Integer.parseInt(txtCodigoHuesped.getText()), txtNombre.getText(),
+							txtApellidos.getText(), txtDireccion.getText(), txtCiudad.getText(),
+							txtNumTarjeta.getText(), Integer.parseInt(txtNumHabitacion.getText()));
+
+					DataHuesped dh = new DataHuesped();
+
+					if (dh.actualizarHuesped(h)) {
+						JOptionPane.showMessageDialog(null, "Huésped actualizado correctamente");
+					} else {
+						JOptionPane.showMessageDialog(null, "No se encontró un huésped con ese código");
+					}
+
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "Código y habitación deben ser números");
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Error al actualizar");
+				}
+			}
+		});
+
 		btnActualizar.setBounds(432, 467, 105, 27);
 		frame.getContentPane().add(btnActualizar);
 
 		JList list = new JList();
 		list.setBounds(169, 405, 200, 50);
 		frame.getContentPane().add(list);
+
 	}
 
 	/**
